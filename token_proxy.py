@@ -1,57 +1,98 @@
-import requests
-import time
-from flask import Flask, Response, request
-import threading
+// token_proxy.js - Cloudflare Worker için
+addEventListener('fetch', event => {
+  event.respondWith(handleRequest(event.request))
+})
 
-app = Flask(__name__)
+// Kanal ID → Token cache
+const channelTokens = new Map()
 
-# Kanal ID → Son token
-channel_tokens = {}
-
-def refresh_token(channel_id):
-    """Her 30 saniyede token yenile"""
-    while True:
-        try:
-            worker_url = f"http://live.cdn-vizi.workers.dev/?ID={channel_id}"
-            response = requests.get(worker_url, allow_redirects=True, timeout=10)
-            
-            # Token'ı çıkar
-            if "sid=" in response.url:
-                channel_tokens[channel_id] = response.url.split("sid=")[-1].split("&")[0]
-                print(f"✅ Kanal {channel_id} token yenilendi: {channel_tokens[channel_id]}")
-        except:
-            pass
-        time.sleep(30)  # 30 saniyede bir yenile
-
-@app.route('/proxy/<channel_id>')
-def proxy_channel(channel_id):
-    """Kullanıcıya her zaman taze token ile yayın ver"""
-    token = channel_tokens.get(channel_id, "")
-    if not token:
-        # İlk defa token al
-        refresh_token(channel_id)
-        token = channel_tokens.get(channel_id, "")
+// Token yenileme fonksiyonu
+async function refreshToken(channelId) {
+  try {
+    const originResponse = await fetch(`http://live.cdn-vizi.workers.dev/?ID=${channelId}`, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+        'Referer': 'http://live.cdn-vizi.workers.dev/'
+      },
+      redirect: 'follow'
+    })
     
-    # Master URL'yi oluştur
-    base_urls = {
-        "24": "https://h7fr.uyanik.tv/dvr/tm1fr_diyanetcocuk.stream_sd",
-        "31": "https://trtcanlitv-lh.akamaized.net/i/TRTBELGESEL_1@181846",
-        # Diğer kanallar için base URL'leri ekle
+    const realUrl = originResponse.url
+    
+    // Token'i çıkar
+    if (realUrl.includes('sid=')) {
+      const token = realUrl.split('sid=')[1].split('&')[0]
+      channelTokens.set(channelId, {
+        token: token,
+        timestamp: Date.now(),
+        fullUrl: realUrl
+      })
+      console.log(`✅ Kanal ${channelId} token yenilendi: ${token}`)
+      return realUrl
     }
     
-    base = base_urls.get(channel_id, "")
-    if base:
-        stream_url = f"{base}.m3u8?sid={token}"
-        return Response(requests.get(stream_url, stream=True).content, mimetype='application/vnd.apple.mpegurl')
+    return realUrl
+  } catch (error) {
+    console.error(`❌ Token yenileme hatası: ${error}`)
+    return null
+  }
+}
+
+// Ana istek işleyici
+async function handleRequest(request) {
+  const url = new URL(request.url)
+  const path = url.pathname
+  
+  // URL formatı: /kanal/ID veya /ID
+  let channelId = path.split('/').pop()
+  
+  // Query param olarak ID: ?ID=24
+  if (!channelId || channelId === '') {
+    channelId = url.searchParams.get('ID')
+  }
+  
+  if (!channelId) {
+    return new Response('Kanal ID gerekli! Örnek: /24 veya ?ID=24', { status: 400 })
+  }
+  
+  // Token'i kontrol et (30 saniyede bir yenile)
+  const tokenData = channelTokens.get(channelId)
+  const now = Date.now()
+  
+  if (!tokenData || (now - tokenData.timestamp) > 30000) {
+    // Token yoksa veya 30 saniye geçtiyse yenile
+    await refreshToken(channelId)
+  }
+  
+  // Taze token ile yayını al
+  const freshTokenData = channelTokens.get(channelId)
+  if (!freshTokenData) {
+    return new Response('Token alınamadı', { status: 500 })
+  }
+  
+  // Segment isteği mi kontrol et
+  const isSegment = request.url.includes('.ts')
+  
+  try {
+    const streamResponse = await fetch(freshTokenData.fullUrl, {
+      headers: {
+        'User-Agent': request.headers.get('User-Agent') || 'Mozilla/5.0',
+        'Referer': 'http://live.cdn-vizi.workers.dev/'
+      }
+    })
     
-    return "Kanal bulunamadı", 404
-
-# Her kanal için background thread başlat
-for cid in ["24", "31", "34", "25"]:  # İzlediğiniz kanallar
-    thread = threading.Thread(target=refresh_token, args=(cid,))
-    thread.daemon = True
-    thread.start()
-
-if __name__ == '__main__':
-    print("🚀 Token yenileme proxy başlatıldı: http://localhost:5000/proxy/24")
-    app.run(host='0.0.0.0', port=5000)
+    // Yanıtı kullanıcıya aktar
+    const headers = new Headers(streamResponse.headers)
+    headers.set('Access-Control-Allow-Origin', '*')
+    headers.set('Cache-Control', 'no-cache')
+    
+    return new Response(streamResponse.body, {
+      status: streamResponse.status,
+      statusText: streamResponse.statusText,
+      headers: headers
+    })
+    
+  } catch (error) {
+    return new Response(`Yayın hatası: ${error}`, { status: 500 })
+  }
+}
