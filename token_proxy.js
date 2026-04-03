@@ -1,77 +1,80 @@
 export default {
-  async fetch(request) {
+  async fetch(request, env, ctx) {
     const url = new URL(request.url);
     const channelId = url.searchParams.get('ID');
-    const path = url.pathname;
-
-    // Yardım ekranı
-    if (!channelId && path === '/') {
-      return new Response(`
-╔═══════════════════════════════════════╗
-║   M3U8 PLAYLIST PROXY - ÇALIŞIYOR     ║
-╠═══════════════════════════════════════╣
-║ Kullanım: ?ID=1 (TRT 1)               ║
-║           ?ID=3 (SHOW TV)             ║
-╚═══════════════════════════════════════╝
-      `, { headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
-    }
 
     if (!channelId) {
-      return new Response('❌ ID parametresi gerekli', { status: 400 });
+      return new Response('✅ Çalışıyor! Kullanım: ?ID=1', { 
+        status: 200,
+        headers: { 'Content-Type': 'text/plain; charset=utf-8' }
+      });
     }
 
-    try {
-      // cdn-vizi'den M3U8 playlist al
-      const playlistResponse = await fetch(`http://live.cdn-vizi.workers.dev/?ID=${channelId}`, {
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
-          'Accept': '*/*'
-        }
-      });
+    // TransformStream ile sonsuz akış
+    const { readable, writable } = new TransformStream();
+    
+    // Arka planda sürekli M3U8 güncellemesi yap
+    ctx.waitUntil(streamM3U8(channelId, writable));
 
-      let playlistContent = await playlistResponse.text();
-
-      // M3U8 mi kontrol et
-      if (!playlistContent.includes('#EXTM3U')) {
-        return new Response('❌ Geçersiz M3U8 yanıtı', { status: 500 });
+    return new Response(readable, {
+      headers: {
+        'Content-Type': 'application/vnd.apple.mpegurl',
+        'Access-Control-Allow-Origin': '*',
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Connection': 'keep-alive'
       }
-
-      // ✅ URL'leri değiştir - worker üzerinden proxy et
-      const workerUrl = url.origin;
-      
-      playlistContent = playlistContent.replace(
-        /https:\/\/h1fr\.uyanik\.tv\/([^\s]+)/g,
-        `${workerUrl}/proxy?url=https://h1fr.uyanik.tv/$1`
-      );
-
-      // Temiz M3U8 döndür
-      return new Response(playlistContent, {
-        headers: {
-          'Content-Type': 'application/vnd.apple.mpegurl',
-          'Access-Control-Allow-Origin': '*',
-          'Cache-Control': 'no-cache, no-store, must-revalidate'
-        }
-      });
-
-    } catch (error) {
-      return new Response(`❌ Hata: ${error.message}`, { status: 500 });
-    }
+    });
   }
 };
 
-// Proxy endpoint (gereksiz olabilir ama ekledim)
-async function proxySegment(segmentUrl) {
-  const response = await fetch(segmentUrl, {
-    headers: {
-      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
-    }
-  });
+async function streamM3U8(channelId, writable) {
+  const writer = writable.getWriter();
+  const encoder = new TextEncoder();
+  
+  let lastSegments = new Set();
+  let isFirstRequest = true;
 
-  return new Response(response.body, {
-    headers: {
-      'Content-Type': 'video/MP2T',
-      'Access-Control-Allow-Origin': '*',
-      'Cache-Control': 'no-cache'
+  try {
+    while (true) {
+      try {
+        // cdn-vizi'den taze M3U8 al
+        const response = await fetch(`http://live.cdn-vizi.workers.dev/?ID=${channelId}`, {
+          headers: {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+            'Cache-Control': 'no-cache'
+          }
+        });
+
+        const m3u8Text = await response.text();
+
+        if (m3u8Text.includes('#EXTM3U')) {
+          // İlk istekte tam M3U8 gönder
+          if (isFirstRequest) {
+            await writer.write(encoder.encode(m3u8Text));
+            isFirstRequest = false;
+            
+            // Segment URL'lerini kaydet
+            const segments = m3u8Text.match(/https:\/\/[^\s]+\.ts[^\s]*/g) || [];
+            segments.forEach(s => lastSegments.add(s));
+          }
+        }
+
+      } catch (e) {
+        console.error('Fetch hatası:', e);
+      }
+
+      // 3 saniye bekle ve tekrar al (segment süresi 9sn, güvenli aralık 3sn)
+      await sleep(3000);
     }
-  });
+  } catch (e) {
+    console.error('Stream hatası:', e);
+  } finally {
+    try {
+      await writer.close();
+    } catch (e) {}
+  }
+}
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
