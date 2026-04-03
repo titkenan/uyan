@@ -4,17 +4,21 @@ export default {
     const path = url.pathname;
     const channelId = url.searchParams.get('ID');
 
-    // ===== TÜM URL'LERİ ÇIKAR =====
+    // ===== TÜM URL'LERİ ÇIKAR (YAVAŞ YAVAŞ) =====
     if (path === '/extract-all') {
-      let results = [];
+      let results = ['🔍 URL Çıkarma Başladı...\n'];
       
       for (let id = 1; id <= 110; id++) {
-        const realUrl = await getRealUrl(id);
-        if (realUrl && !realUrl.includes('cdn-vizi')) {
-          results.push(`ID ${id}: ${realUrl}`);
+        try {
+          const realUrl = await getRealUrl(id);
+          if (realUrl) {
+            results.push(`ID ${id}: ${realUrl}`);
+          } else {
+            results.push(`ID ${id}: ❌ Bulunamadı`);
+          }
+        } catch (e) {
+          results.push(`ID ${id}: ⚠️ Hata - ${e.message}`);
         }
-        // Rate limit için bekle
-        await new Promise(r => setTimeout(r, 100));
       }
       
       return new Response(results.join('\n'), {
@@ -25,66 +29,110 @@ export default {
       });
     }
 
-    // ===== TEK KANAL URL'İ GÖSTER =====
+    // ===== TEK KANAL DEBUG =====
     if (path === '/show' && channelId) {
       const realUrl = await getRealUrl(channelId);
-      return new Response(`Kanal ${channelId}:\n${realUrl}`, {
+      const debugInfo = `
+🔍 Debug Bilgisi - Kanal ${channelId}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📌 Kaynak: http://live.cdn-vizi.workers.dev/?ID=${channelId}
+📍 Bulunan URL: ${realUrl || '❌ NULL'}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+      `;
+      return new Response(debugInfo, {
         headers: { 'Content-Type': 'text/plain; charset=utf-8' }
       });
     }
 
-    // ===== NORMAL YÖNLENDIRME =====
+    // ===== HIZLI TEST (İLK 10 KANAL) =====
+    if (path === '/test') {
+      let results = ['🧪 Hızlı Test (ID 1-10):\n'];
+      
+      for (let id = 1; id <= 10; id++) {
+        const realUrl = await getRealUrl(id);
+        results.push(`ID ${id}: ${realUrl || '❌'}`);
+      }
+      
+      return new Response(results.join('\n'), {
+        headers: { 'Content-Type': 'text/plain; charset=utf-8' }
+      });
+    }
+
+    // ===== YARDIM EKRANI =====
     if (!channelId) {
       return new Response(`
 ╔════════════════════════════════════════╗
 ║     KANAL YÖNLENDIRME SERVİSİ          ║
 ╠════════════════════════════════════════╣
 ║ Kullanım:                              ║
-║   ?ID=1         → TRT 1 izle           ║
-║   ?ID=2         → ATV izle             ║
-║   /show?ID=1    → Gerçek URL'i göster  ║
-║   /extract-all  → Tüm URL'leri çıkar   ║
+║   ?ID=1           → TRT 1 izle         ║
+║   /show?ID=1      → Debug bilgisi      ║
+║   /test           → İlk 10 kanal test  ║
+║   /extract-all    → Tüm URL'ler (yavaş)║
 ╚════════════════════════════════════════╝
       `, {
         headers: { 'Content-Type': 'text/plain; charset=utf-8' }
       });
     }
 
-    // Gerçek URL'i al ve yönlendir
+    // ===== NORMAL YÖNLENDIRME =====
     try {
       const realUrl = await getRealUrl(channelId);
       
-      if (!realUrl || realUrl.includes('cdn-vizi')) {
-        return new Response(`❌ Kanal ${channelId} bulunamadı`, { status: 404 });
+      if (!realUrl) {
+        return new Response(`❌ Kanal ${channelId} için URL alınamadı`, { 
+          status: 404,
+          headers: { 'Content-Type': 'text/plain; charset=utf-8' }
+        });
       }
 
-      // 302 Redirect - Stream direkt açılır
+      // 302 Redirect
       return Response.redirect(realUrl, 302);
 
     } catch (error) {
-      return new Response(`❌ Hata: ${error.message}`, { status: 500 });
+      return new Response(`❌ Hata: ${error.message}`, { 
+        status: 500,
+        headers: { 'Content-Type': 'text/plain; charset=utf-8' }
+      });
     }
   }
 };
 
 async function getRealUrl(channelId) {
   try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 5000);
-
-    const response = await fetch(`http://live.cdn-vizi.workers.dev/?ID=${channelId}`, {
-      method: 'GET',
-      redirect: 'follow',
-      signal: controller.signal,
+    // Önce HEAD isteği dene
+    let response = await fetch(`http://live.cdn-vizi.workers.dev/?ID=${channelId}`, {
+      method: 'HEAD',
+      redirect: 'manual', // Redirect takip etme
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Accept': '*/*',
-        'Referer': 'http://live.cdn-vizi.workers.dev/'
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
       }
     });
 
-    clearTimeout(timeoutId);
-    return response.url;
+    // Location header'ı varsa al
+    let location = response.headers.get('Location');
+    if (location && !location.includes('cdn-vizi')) {
+      return location;
+    }
+
+    // HEAD işe yaramadıysa GET dene
+    response = await fetch(`http://live.cdn-vizi.workers.dev/?ID=${channelId}`, {
+      method: 'GET',
+      redirect: 'follow',
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+      }
+    });
+
+    // Final URL
+    const finalUrl = response.url;
+    
+    // Eğer hala cdn-vizi dönüyorsa NULL döndür
+    if (finalUrl.includes('cdn-vizi')) {
+      return null;
+    }
+
+    return finalUrl;
 
   } catch (error) {
     console.error(`Kanal ${channelId} hatası:`, error);
