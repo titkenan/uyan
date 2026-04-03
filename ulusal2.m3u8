@@ -1,0 +1,129 @@
+#EXTM3U
+
+# ==========================================
+# 🇹🇷 TURKIYE - ULUSAL KANALLAR
+# ==========================================
+
+#EXTINF:-1 tvg-id="" tvg-name="TR:Trt 1 HD" tvg-logo="https://feo.kablowebtv.com/resize/168A635D265A4328C2883FB4CD8FF/0/0/Vod/HLS/80196fc2-f4f6-4e35-ae29-7925a5885a20.png" group-title="🇹🇷 TURKIYE",TRT 1 HD
+https://tv-trt1.medya.trt.com.tr/master.m3u8
+
+#EXTINF:-1 tvg-id="" tvg-name="TR:Trt 1 HD (Yedek)" tvg-logo="https://feo.kablowebtv.com/resize/168A635D265A4328C2883FB4CD8FF/0/0/Vod/HLS/80196fc2-f4f6-4e35-ae29-7925a5885a20.png" group-title="🇹🇷 TURKIYE",TRT 1 HD (Yedek)
+http://89.187.191.41/TRT-1-HD-TR/video.m3u8
+
+#EXTINF:-1 tvg-id="" tvg-name="TR:Trt 2 HD" tvg-logo="https://feo.kablowebtv.com/resize/168A635D265A4328C2883FB4CD8FF/0/0/Vod/HLS/14a65b49-958f-497f-be22-52d958ef8498.png" group-title="🇹🇷 TURKIYE",TRT 2 HD
+https://tv-trt2.medya.trt.com.tr/master.m3u8
+
+#EXTINF:-1 tvg-id="" tvg-name="TR:Trt 2 HD (Yedek)" tvg-logo="https://feo.kablowebtv.com/resize/168A635D265A4328C2883FB4CD8FF/0/0/Vod/HLS/14a65b49-958f-497f-be22-52d958ef8498.png" group-title="🇹🇷 TURKIYE",TRT 2 HD (Yedek)
+https://trn03.tulix.tv/gt-trt2/playlist.m3u8
+
+#EXTINF:-1 tvg-id="" tvg-name="TR:ATV HD" tvg-logo="https://feo.kablowebtv.com/resize/168A635D265A4328C2883FB4CD8FF/0/0/Vod/HLS/33b10329-faa9-4247-aa46-92a305ed5a92.png" group-title="🇹🇷 TURKIYE",ATV HD
+https://rnttwmjcin.turknet.ercdn.net/lcpmvefbyo/atv/atv.m3u8
+
+#EXTINF:-1 tvg-id="" tvg-name="TR:ATV HD (Yedek)" tvg-logo="https://feo.kablowebtv.com/resize/168A635D265A4328C2883FB4CD8FF/0/0/Vod/HLS/33b10329-faa9-4247-aa46-92a305ed5a92.png" group-title="🇹🇷 TURKIYE",ATV HD (Yedek)
+http://89.187.191.41/ATV-HD-TR/video.m3u8
+
+#EXTINF:-1 tvg-id="" tvg-name="TR:Kanal D HD" tvg-logo="https://feo.kablowebtv.com/resize/168A635D265A4328C2883FB4CD8FF/500/500/channels/logos/d7c5d3d5-2942-4715-872f-73be070dc201.png" group-title="🇹🇷 TURKIYE",Kanal D HD
+https://demiroren.daioncdn.net/kanald/kanald.m3u8?app=kanald_web
+
+#EXTINF:-1 tvg-id="" tvg-name="TR:Kanal D HD (Yedek)" tvg-logo="https://feo.kablowebtv.com/resize/168A635D265A4328C2883FB4CD8FF/500/500/channels/logos/d7c5d3d5-2942-4715-872f-73be070dc201.png" group-title="🇹🇷 TURKIYE",Kanal D HD (Yedek)
+http://live.duhnet.tv/S2/HLS_LIVE/kanalddainp/playlist.m3u8
+
+#EXTINF:-1 tvg-id="" tvg-name="TR:Show TV HD" tvg-logo="https://feo.kablowebtv.com/resize/168A635D265A4328C2883FB4CD8FF/500/500/channels/logos/04fb743d-4a72-4907-8c54-f53b72c3600a.png" group-title="🇹🇷 TURKIYE",Show TV HD
+https://ciner.daioncdn.net/showtv/showtv.m3u8?app=showtv_web
+
+#EXTINF:-1 tvg-id="" tvg-name="TR:Show TV HD (Yedek)" tvg-logo="https://feo.kablowebtv.com/resize/168A635D265A4328C2883FB4CD8FF/500/500/channels/logos/04fb743d-4a72-4907-8c54-f53b72c3600a.png" group-title="🇹🇷 TURKIYE",Show TV HD (Yedek)
+https://rmtftbjlne.turknet.ercdn.net/bpeytmnqyp/showtv/showtv.m3u8
+
+#EXTINF:-1 tvg-id="" tvg-name="TR:Star HD" tvg-logo="https://feo.kablowebtv.com/resize/168A635D265A4328C2883FB4CD8FF/500/500/channels/logos/4a7901e4-dbc5-491d-b014-6da6fa236e99.png" group-title="🇹🇷 TURKIYE",Star TV HD
+https://dogus.daioncdn.net/startv/startv.m3u8?app=startv_web
+
+#EXTINF:-1 tvg-id="" tvg-name="TR:Star HD (Yedek)" tvg-logo="https://feo.kablowebtv.com/resize/168A635D265A4328C2883FB4CD8FF/500/500/channels/logos/4a7901e4-dbc5-491d-b014-6da6fa236e99.png" group-title="🇹🇷 TURKIYE",Star TV HD (Yedek)
+http://dygvideo.dygdigital.com/live/hls/startv4puhu?m3u8
+
+#EXTINF:-1 tvg-id="" tvg-name="TR:Now HD" tvg-logo="https://feo.kablowebtv.com/resize/168A635D265A4328C2883FB4CD8FF/0/0/Vod/HLS/25c7c620-dfe4-4c78-9d9b-185d8a91885f.png" group-title="🇹🇷 TURKIYE",Now TV HD
+https://uycyyuuzyh.turknet.ercdn.net/nphindgytw/nowtv/nowtv_720p.m3u8
+
+#EXTINF:-1 tvg-id="" tvg-name="TR:TV 8 HD" tvg-logo="https://feo.kablowebtv.com/resize/168A635D265A4328C2883FB4CD8FF/0/0/Vod/HLS/ab41b407-70c4-4634-8ed4-bf9be8cf81e2.png" group-title="🇹🇷 TURKIYE",TV 8 HD
+https://tv8.daioncdn.net/tv8/tv8_1080p.m3u8?app=tv8_web
+
+#EXTINF:-1 tvg-id="" tvg-name="TR:TV 8 Buçuk HD" tvg-logo="https://feo.kablowebtv.com/resize/168A635D265A4328C2883FB4CD8FF/0/0/Vod/HLS/812f4ba5-846e-4ae9-90fc-8f9f481156b5.png" group-title="🇹🇷 TURKIYE",TV 8.5 HD
+https://tv8.daioncdn.net/tv8bucuk/tv8bucuk_1080p.m3u8?app=tv8bucuk_web
+
+#EXTINF:-1 tvg-id="" tvg-name="TR:A2 HD" tvg-logo="https://feo.kablowebtv.com/resize/168A635D265A4328C2883FB4CD8FF/0/0/Vod/HLS/fee44d61-2476-40ae-89eb-f51a7428789d.png" group-title="🇹🇷 TURKIYE",A2 TV HD
+https://rnttwmjcin.turknet.ercdn.net/lcpmvefbyo/a2tv/a2tv_1080p.m3u8
+
+#EXTINF:-1 tvg-id="" tvg-name="TR:Teve 2 HD" tvg-logo="https://feo.kablowebtv.com/resize/168A635D265A4328C2883FB4CD8FF/500/500/channels/logos/8373a6d8-d5c5-4990-8fe6-14bcde706ecd.png" group-title="🇹🇷 TURKIYE",Teve 2 HD
+https://live.duhnet.tv/S2/HLS_LIVE/teve2np/playlist.m3u8
+
+#EXTINF:-1 tvg-id="" tvg-name="TR:360 HD" tvg-logo="https://feo.kablowebtv.com/resize/168A635D265A4328C2883FB4CD8FF/0/0/Vod/HLS/36157058-80ce-4724-a7ff-28bbad7df301.png" group-title="🇹🇷 TURKIYE",360 TV HD
+https://turkmedya-live.ercdn.net/tv360/tv360.m3u8
+
+#EXTINF:-1 tvg-id="" tvg-name="TR:TLC HD" tvg-logo="https://feo.kablowebtv.com/resize/168A635D265A4328C2883FB4CD8FF/500/500/channels/logos/0de9fa25-120c-4b52-b460-e078531f6988.png" group-title="🇹🇷 TURKIYE",TLC HD
+https://dogus.daioncdn.net/tlc/tlc.m3u8?app=tlc_web
+
+#EXTINF:-1 tvg-id="" tvg-name="TR:DMAX HD" tvg-logo="https://feo.kablowebtv.com/resize/168A635D265A4328C2883FB4CD8FF/500/500/channels/logos/6a63a310-1f7d-4d5c-b377-1e497f5b3610.png" group-title="🇹🇷 TURKIYE",DMAX HD
+https://dogus.daioncdn.net/dmax/dmax.m3u8?app=dmax_web
+
+#EXTINF:-1 tvg-id="" tvg-name="TR:TV 100 HD" tvg-logo="https://feo.kablowebtv.com/resize/168A635D265A4328C2883FB4CD8FF/500/500/channels/logos/e2291af0-569b-4260-94f3-5505d1a40e76.png" group-title="🇹🇷 TURKIYE",TV 100 HD
+https://tv100-live.daioncdn.net/tv100/tv100_1080p.m3u8
+
+#EXTINF:-1 tvg-id="" tvg-name="TR:KON TV HD" tvg-logo="https://feo.kablowebtv.com/resize/168A635D265A4328C2883FB4CD8FF/0/0/Vod/HLS/6a265ee4-81f8-4a57-80ba-41ddb0663aaf.png" group-title="🇹🇷 TURKIYE",KON TV HD
+https://sweet-truth-729d.han686314.workers.dev/?url=https://helga.iptv2022.com/sh/kon_tv/index.m3u8
+
+#EXTINF:-1 tvg-id="" tvg-name="TR:CNBC-E HD" tvg-logo="https://feo.kablowebtv.com/resize/168A635D265A4328C2883FB4CD8FF/0/0/Vod/HLS/16752eb5-4001-4b31-860c-ab947ed2c86d.png" group-title="🇹🇷 TURKIYE",CNBC-E HD
+https://hnpsechtsc.turknet.ercdn.net/xpnvudnlsv/cnbc-e/cnbc-e.m3u8
+
+#EXTINF:-1 tvg-id="" tvg-name="TR:GZT TV HD" tvg-logo="https://feo.kablowebtv.com/resize/168A635D265A4328C2883FB4CD8FF/0/0/Vod/HLS/86c1a901-3b47-41e6-bf9b-b433ec170fdd.png" group-title="🇹🇷 TURKIYE",GZT TV HD
+https://mn-nl.mncdn.com/gzttv/gzttv/playlist.m3u8
+
+#EXTINF:-1 tvg-id="" tvg-name="TR:Kanal B HD" tvg-logo="https://feo.kablowebtv.com/resize/168A635D265A4328C2883FB4CD8FF/0/0/Vod/HLS/fc190867-720b-4e57-b561-993d0a02bcae.png" group-title="🇹🇷 TURKIYE",Kanal B HD
+https://baskentaudiovideo.xyz/LiveApp/streams/mUE22idl26lA1683879097431.m3u8
+
+#EXTINF:-1 tvg-id="" tvg-name="TR:TYT TÜRK HD" tvg-logo="https://feo.kablowebtv.com/resize/168A635D265A4328C2883FB4CD8FF/0/0/Vod/HLS/b6c2e739-0336-4e34-9f27-38e181522363.png" group-title="🇹🇷 TURKIYE",TYT TÜRK HD
+https://cdn-tytturk.yayin.com.tr/tytturk/index.m3u8
+
+#EXTINF:-1 tvg-id="" tvg-name="TR:TMB HD" tvg-logo="https://feo.kablowebtv.com/resize/168A635D265A4328C2883FB4CD8FF/500/500/channels/logos/3d8f616d-a421-4fcd-a13a-1a29e3bbd88c.png" group-title="🇹🇷 TURKIYE",TMB HD
+https://str.yodacdn.net/tmb_tr_app/index.m3u8
+
+#EXTINF:-1 tvg-id="" tvg-name="TR:TV 4 HD" tvg-logo="https://feo.kablowebtv.com/resize/168A635D265A4328C2883FB4CD8FF/0/0/Vod/HLS/66c8ed0b-96b6-4476-806e-5e8e877c7fd4.png" group-title="🇹🇷 TURKIYE",TV 4 HD
+https://turkmedya-live.ercdn.net/tv4/tv4.m3u8
+
+#EXTINF:-1 tvg-id="" tvg-name="TR:Bengü Türk HD" tvg-logo="https://feo.kablowebtv.com/resize/168A635D265A4328C2883FB4CD8FF/500/500/channels/logos/6edd1622-84fd-4ebf-a50b-7e95787ee427.png" group-title="🇹🇷 TURKIYE",Bengü Türk HD
+https://tv.ensonhaber.com/benguturk/benguturk_720p.m3u8
+
+# ==========================================
+# 📰 HABER KANALLARI
+# ==========================================
+
+#EXTINF:-1 tvg-id="" tvg-name="TR:TRT Haber HD" tvg-logo="https://feo.kablowebtv.com/resize/168A635D265A4328C2883FB4CD8FF/0/0/Vod/HLS/8c07dd0b-0100-4a56-9a8c-9f810a184bd4.png" group-title="📰 HABERLER",TRT Haber HD
+https://tv-trthaber.medya.trt.com.tr/master.m3u8
+
+#EXTINF:-1 tvg-id="" tvg-name="TR:A Haber HD" tvg-logo="https://feo.kablowebtv.com/resize/168A635D265A4328C2883FB4CD8FF/0/0/Vod/HLS/1c207549-826b-4c8e-8dd3-bbd488258430.png" group-title="📰 HABERLER",A Haber HD
+https://trn03.tulix.tv/gt-ahabertv/playlist.m3u8
+
+#EXTINF:-1 tvg-id="" tvg-name="TR:NTV HD" tvg-logo="https://feo.kablowebtv.com/resize/168A635D265A4328C2883FB4CD8FF/500/500/channels/logos/344f452e-fa44-4f00-8005-1b8898186888.png" group-title="📰 HABERLER",NTV HD
+https://dogus.daioncdn.net/ntv/ntv.m3u8?app=ntv_web
+
+#EXTINF:-1 tvg-id="" tvg-name="TR:CNN Türk HD" tvg-logo="https://feo.kablowebtv.com/resize/168A635D265A4328C2883FB4CD8FF/0/0/Vod/HLS/3686a1f5-9c4d-401f-9c7b-031ca66454a0.png" group-title="📰 HABERLER",CNN Türk HD
+https://sweet-truth-729d.han686314.workers.dev/?url=https://helga.iptv2022.com/cnn_turk/index.m3u8
+
+#EXTINF:-1 tvg-id="" tvg-name="TR:24 TV HD" tvg-logo="https://feo.kablowebtv.com/resize/168A635D265A4328C2883FB4CD8FF/0/0/Vod/HLS/216cade3-b4a7-4c8b-8d62-aab7a3431a89.png" group-title="📰 HABERLER",24 TV HD
+https://turkmedya-live.ercdn.net/tv24/tv24_1080p.m3u8
+
+#EXTINF:-1 tvg-id="" tvg-name="TR:TGRT Haber HD" tvg-logo="https://feo.kablowebtv.com/resize/168A635D265A4328C2883FB4CD8FF/0/0/Vod/HLS/a5773592-d40c-4d84-a64a-21c422cc7eb3.png" group-title="📰 HABERLER",TGRT Haber HD
+https://tgrthaber-live.daioncdn.net/tgrthaber/tgrthaber.m3u8
+
+#EXTINF:-1 tvg-id="" tvg-name="TR:Habertürk HD" tvg-logo="https://feo.kablowebtv.com/resize/168A635D265A4328C2883FB4CD8FF/0/0/Vod/HLS/516aa59e-70a2-4be3-9077-02862a052fde.png" group-title="📰 HABERLER",Habertürk HD
+https://rmtftbjlne.turknet.ercdn.net/bpeytmnqyp/haberturktv/haberturktv.m3u8
+
+#EXTINF:-1 tvg-id="" tvg-name="TR:Bloomberg HT HD" tvg-logo="https://feo.kablowebtv.com/resize/168A635D265A4328C2883FB4CD8FF/0/0/Vod/HLS/5795a2e7-9d78-4cc5-b83e-b6dcf36256fd.png" group-title="📰 HABERLER",Bloomberg HT HD
+https://ciner.daioncdn.net/bloomberght/bloomberght.m3u8
+
+#EXTINF:-1 tvg-id="" tvg-name="TR:Ülke TV HD" tvg-logo="https://feo.kablowebtv.com/resize/168A635D265A4328C2883FB4CD8FF/500/500/channels/logos/5a733c68-7739-4466-851d-573cfd125990.png" group-title="📰 HABERLER",Ülke TV HD
+https://livetv.radyotvonline.net/kanal7live/ulketv/playlist.m3u8
+
+#EXTINF:-1 tvg-id="" tvg-name="TR:TVNET HD" tvg-logo="https://feo.kablowebtv.com/resize/168A635D265A4328C2883FB4CD8FF/0/0/Vod/HLS/b6abbbf7-0822-448d-a942-7af6d079d997.png" group-title="📰 HABERLER",TVNET HD
+https://mn-nl.mncdn.com/tvnet/tvnet/playlist.m3u8
+
+#EXTINF:-1 tvg-id="" tvg-name="TR:Akit TV HD" tvg-logo="https://feo.kablowebtv.com/resize/168A635D265A4328C2883FB4CD8FF/0/0/Vod/HLS/76a7dd67-cee1-4c70-914e-551d77e09661.png" group-title="📰 HABERLER",Akit TV HD
+https://akittv-live.ercdn.net/akittv/akittv_720p.m3u8
