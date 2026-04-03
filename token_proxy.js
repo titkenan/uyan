@@ -2,65 +2,76 @@ export default {
   async fetch(request) {
     const url = new URL(request.url);
     const channelId = url.searchParams.get('ID');
+    const path = url.pathname;
 
-    if (!channelId) {
-      return new Response(`✅ Sonsuz Akış Proxy Çalışıyor
-
-Kullanım: ?ID=1
-`, { headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
+    // Yardım ekranı
+    if (!channelId && path === '/') {
+      return new Response(`
+╔═══════════════════════════════════════╗
+║   M3U8 PLAYLIST PROXY - ÇALIŞIYOR     ║
+╠═══════════════════════════════════════╣
+║ Kullanım: ?ID=1 (TRT 1)               ║
+║           ?ID=3 (SHOW TV)             ║
+╚═══════════════════════════════════════╝
+      `, { headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
     }
 
-    // ✅ 30 SANİYE LİMİTİ ATLAMA HİLESİ
-    const { readable, writable } = new TransformStream();
+    if (!channelId) {
+      return new Response('❌ ID parametresi gerekli', { status: 400 });
+    }
 
-    // Arka planda akışı sonsuza kadar çalıştır
-    streamForever(channelId, writable);
-
-    // Cevabı HEMEN dön - limiti atlatmak için en önemli kısım
-    return new Response(readable, {
-      headers: {
-        'Content-Type': 'video/MP2T',
-        'Access-Control-Allow-Origin': '*',
-        'Cache-Control': 'no-cache',
-        'Connection': 'keep-alive'
-      }
-    });
-  }
-};
-
-async function streamForever(channelId, writable) {
-  const writer = writable.getWriter();
-
-  try {
-    while (true) {
-      console.log(`Yeni bağlantı açılıyor ID: \({channelId}`);
-      
-      const response = await fetch(`http://live.cdn-vizi.workers.dev/?ID=\){channelId}`, {
+    try {
+      // cdn-vizi'den M3U8 playlist al
+      const playlistResponse = await fetch(`http://live.cdn-vizi.workers.dev/?ID=${channelId}`, {
         headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+          'Accept': '*/*'
         }
       });
 
-      const reader = response.body.getReader();
+      let playlistContent = await playlistResponse.text();
 
-      try {
-        while (true) {
-          const { done, value } = await reader.read();
-          
-          if (done) break;
+      // M3U8 mi kontrol et
+      if (!playlistContent.includes('#EXTM3U')) {
+        return new Response('❌ Geçersiz M3U8 yanıtı', { status: 500 });
+      }
 
-          await writer.write(value);
+      // ✅ URL'leri değiştir - worker üzerinden proxy et
+      const workerUrl = url.origin;
+      
+      playlistContent = playlistContent.replace(
+        /https:\/\/h1fr\.uyanik\.tv\/([^\s]+)/g,
+        `${workerUrl}/proxy?url=https://h1fr.uyanik.tv/$1`
+      );
+
+      // Temiz M3U8 döndür
+      return new Response(playlistContent, {
+        headers: {
+          'Content-Type': 'application/vnd.apple.mpegurl',
+          'Access-Control-Allow-Origin': '*',
+          'Cache-Control': 'no-cache, no-store, must-revalidate'
         }
-      } catch (e) {}
+      });
 
-      // Bağlantı koptu 50ms bekle ve SESSİZCE tekrar bağlan
-      await new Promise(r => setTimeout(r, 50));
-      console.log(`Bağlantı yenilendi ID: ${channelId}`);
+    } catch (error) {
+      return new Response(`❌ Hata: ${error.message}`, { status: 500 });
     }
-
-  } catch (e) {
-    console.error('Genel hata', e);
-  } finally {
-    writer.close();
   }
+};
+
+// Proxy endpoint (gereksiz olabilir ama ekledim)
+async function proxySegment(segmentUrl) {
+  const response = await fetch(segmentUrl, {
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+    }
+  });
+
+  return new Response(response.body, {
+    headers: {
+      'Content-Type': 'video/MP2T',
+      'Access-Control-Allow-Origin': '*',
+      'Cache-Control': 'no-cache'
+    }
+  });
 }
